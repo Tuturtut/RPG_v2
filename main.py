@@ -11,6 +11,7 @@ from components.social import Mood
 
 from components.economy import Inventory
 from components.economy import Service
+from components.economy import Item
 
 
 from systems.aiSystem import AISystem
@@ -21,14 +22,18 @@ from systems.moveSystem import MoveSystem
 from systems.tradeSystem import TradeSystem
 from systems.renderSystem import RenderSystem
 
+from templates.items import create_from_template
+
 from world import World
 
 
 # Initialisation du monde
 w = World()
+beers = [create_from_template(w, "biere") for _ in range(3)] 
+
 
 auberge = Entity("Auberge")
-auberge.add_comp(Inventory(["Biere", "Biere", "Biere"]))
+auberge.add_comp(Inventory(beers))
 auberge.add_comp(Area())
 auberge.add_comp(Service("FOOD"))
 
@@ -43,7 +48,7 @@ jean.add_comp(Hunger(10, 10))
 charles = Entity("Charles")
 charles.add_comp(Position("Maison"))
 charles.add_comp(Mood("Bien"))
-charles.add_comp(Inventory(["Pierre", "Biere"]))
+charles.add_comp(Inventory())
 charles.add_comp(Hunger(12, 12))
 
 # # Création d'un Ours (qui n'a pas de routine ni de mood, juste une position)

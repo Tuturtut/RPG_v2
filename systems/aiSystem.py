@@ -23,11 +23,20 @@ class AISystem:
 
                 if target_entity:
                     if pos.at_entity == target_entity:
-                        from entity import Entity
-                        ticket = Entity(f"Ticket_{e.name}")
-                        ticket.add_comp(TradeRequest(sender=target_entity, receiver=e, item="Biere"))
+                        target_inv = target_entity.get_comp("Inventory")
 
-                        world_state["world"].add_entity(ticket)
+                        for item in target_inv.items:
+                            item_type = item.get_comp("Item")
+                            if item_type and item_type.type == "food":
+
+
+                                from entity import Entity
+                                ticket = Entity(f"Ticket_{e.name}")
+
+                                ticket.add_comp(TradeRequest(sender=target_entity, receiver=e, item=item))
+
+                                world_state["world"].add_entity(ticket)
+                                break
 
                     elif not e.get_comp("Movement"):
                         e.add_comp(Movement(direction=target_entity))

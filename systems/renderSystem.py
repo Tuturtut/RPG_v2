@@ -31,8 +31,15 @@ class RenderSystem:
 
             if mood or inv:
                 details = "    └─ "
-                if mood: details += f"[{mood.feeling}] "
-                if inv: details += f"I-[{', '.join(inv.items) if inv.items else 'vide'}]"
+                if mood: 
+                    details += f"{mood.feeling} "
+                    details +="\n    └─ "
+
+                if inv:
+                    details += "I-("
+                    for i in inv.items:
+                        details += f"[{i.name}]"
+                    details += ")"
                 print(details)
             if hunger:
                 print(f"    └─ Faim {hunger.current}/{hunger.max_val}")

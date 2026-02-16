@@ -1,16 +1,23 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-
+@dataclass
 class Inventory:
-    def __init__(self, items=None):
-        self.items = items if items is not None else []
+    items: list = field(default_factory=list)
 
+@dataclass
+class Item:
+    type: str = None
+
+@dataclass
+class Value:
+    value: int
+
+@dataclass
 class TradeRequest:
-    def __init__(self, sender, receiver, item):
-        self.sender = sender
-        self.receiver = receiver
-        self.item = item
-        self.status = "PENDING"
+    sender: any = None
+    receiver: any = None
+    item: str = None
+    status: str = "PENDING"
 
 @dataclass
 class Service:
