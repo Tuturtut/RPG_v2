@@ -1,0 +1,33 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints
+
+# --- Environnements Virtuels ---
+# Il est crucial de ne pas commit ton dossier 'venv'
+.venv/
+venv/
+ENV/
+env/
+
+# --- IDE (Visual Studio Code, PyCharm) ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Logs et Données Temporaires ---
+*.log
+crash_dump.txt
+# Si tu crées un dossier pour des sauvegardes ou exports
+/backups/
+
+# --- OS spécifiques ---
+.DS_Store
+Thumbs.db
+
+# --- Packaging / Distribution ---
+dist/
+build/
+*.egg-info/
