@@ -26,7 +26,6 @@ class TradeSystem:
                 else:
                     request.status = "FAILED"
                 
-
             
             # Une fois traitée, on pourra supprimer cette entité au tour suivant
             ticket.add_comp(Delete()) # Un tag pour dire "À supprimer"

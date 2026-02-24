@@ -1,88 +1,55 @@
-from components.economy import TradeRequest
+
 from entity import Entity
-
-from components.base import Position
-from components.base import Area
-from components.base import ActionRequest
-
-from components.biology import Hunger
-
-from components.social import Mood
-
-from components.economy import Inventory
-from components.economy import Service
-from components.economy import Item
-
-
-from systems.aiSystem import AISystem
-from systems.deleteSystem import DeleteSystem
-from systems.eatingSystem import EatingSystem
-from systems.hungerSystem import HungerSystem
-from systems.moveSystem import MoveSystem
-from systems.tradeSystem import TradeSystem
-from systems.renderSystem import RenderSystem
-
-from templates.items import create_from_template
-
 from world import World
 
+from components.base import Area, Position
+from components.biology import Health, Hunger, Mindset
+from components.economy import Inventory
 
-# Initialisation du monde
+from systems.prisonDirector import PrisonDirector
+from systems.renderSystem import RenderSystem
+from systems.healthSystem import HealthSystem
+from systems.hungerSystem import HungerSystem
+from systems.eatingSystem import EatingSystem
+from systems.deleteSystem import DeleteSystem
+
+from factories.entityFactory import EntityFactory
+
+prison = Entity("Prison")
+prison.add_comp(Area())
+prison.add_tag("bread_spawn_location")
+
+the_old_one = Entity("L'encien")
+the_old_one.add_comp(Position(location_name="Prison", at_entity=prison))
+the_old_one.add_comp(Health(current_health=8, max_health=10))
+the_old_one.add_comp(Hunger(current=7, max_val=10))
+# the_old_one.add_comp(Inventory())
+# the_old_one.add_comp(Mindset(trait="stoic"))
+
+the_young_one = Entity("Le jeune")
+the_young_one.add_comp(Position(location_name="Prison", at_entity=prison))
+the_young_one.add_comp(Health(current_health=10, max_health=10))
+the_young_one.add_comp(Hunger(current=10, max_val=10))
+# the_young_one.add_comp(Inventory())
+# the_young_one.add_comp(Mindset(trait="unstable"))
+
 w = World()
-beers = [create_from_template(w, "biere") for _ in range(3)] 
+w.add_entity(prison)
+w.add_entity(the_old_one)
+w.add_entity(the_young_one)
 
 
-auberge = Entity("Auberge")
-auberge.add_comp(Inventory(beers))
-auberge.add_comp(Area())
-auberge.add_comp(Service("FOOD"))
-
-
-# Création de Jean le Forgeron
-jean = Entity("Jean le Forgeron")
-jean.add_comp(Position("Forge"))
-jean.add_comp(Mood())
-jean.add_comp(Inventory())
-jean.add_comp(Hunger(10, 10))
-
-charles = Entity("Charles")
-charles.add_comp(Position("Maison"))
-charles.add_comp(Mood("Bien"))
-charles.add_comp(Inventory())
-charles.add_comp(Hunger(12, 12))
-
-# # Création d'un Ours (qui n'a pas de routine ni de mood, juste une position)
-# ours = Entity("Ours sauvage")
-# ours.add_comp(Position("Forêt"))
-
-
-
-w.add_entity(jean)
-# w.add_entity(ours)
-w.add_entity(charles)
-w.add_entity(auberge)
-
-# Ajout des systèmes
-w.add_system(TradeSystem())
-w.add_system(MoveSystem())
+w.add_system(HealthSystem())
 w.add_system(HungerSystem())
 w.add_system(EatingSystem())
-w.add_system(AISystem())
+w.add_system(PrisonDirector(entity_factory=EntityFactory(world_state=w)))
 
-w.add_system(RenderSystem()) # A la toute fin
 w.add_system(DeleteSystem())
 
-# --- SIMULATION ---
-for i in range(60):
+w.add_system(RenderSystem(mode="FULL"))
+
+round_nbr = 30
+
+for i in range(round_nbr):
     w.update()
-
-# # 1. Beau temps, Paix
-# my_world.update()
-
-# # 2. Il commence à pleuvoir
-# my_world.global_state["is_raining"] = True
-# my_world.update()
-
-# # 3. La guerre éclate !
-# my_world.global_state["war_declared"] = True
-# my_world.update()
+    

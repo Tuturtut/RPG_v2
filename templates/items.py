@@ -4,7 +4,8 @@ from components.economy import Value
 from entity import Entity
 
 ITEM_TEMPLATES = {
-    "biere" : {"name": "Bière", "comps": [Item(type="food"), Value(value=1)]},
+    "biere" : {"name": "Bière", "comps": [Item(type="FOOD"), Value(value=1)]},
+    "bread" : {"name": "Pain", "comps": [Item(type="FOOD"), Value(value=1)]},
 }
 
 def create_from_template(world, template_id):

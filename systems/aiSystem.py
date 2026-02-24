@@ -8,6 +8,9 @@ class AISystem:
     def update(self, entities, world_state):
         for e in entities:
 
+            if e.get_comp("Dead"): continue
+
+
             pos = e.get_comp("Position")
             routine = e.get_comp("Routine")
             mood = e.get_comp("Mood")

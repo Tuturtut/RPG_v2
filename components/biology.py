@@ -12,3 +12,10 @@ class Hunger:
     current: int
     max_val: int
     threshold: int = 3
+
+class Dead:
+    pass
+
+@dataclass
+class Mindset:
+    trait: str
