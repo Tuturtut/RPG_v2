@@ -1,4 +1,6 @@
 
+import keyboard
+
 from entity import Entity
 from world import World
 
@@ -14,6 +16,8 @@ from systems.eatingSystem import EatingSystem
 from systems.deleteSystem import DeleteSystem
 
 from factories.entityFactory import EntityFactory
+
+from rich import print
 
 prison = Entity("Prison")
 prison.add_comp(Area())
@@ -42,14 +46,18 @@ w.add_entity(the_young_one)
 w.add_system(HealthSystem())
 w.add_system(HungerSystem())
 w.add_system(EatingSystem())
-w.add_system(PrisonDirector(entity_factory=EntityFactory(world_state=w)))
 
 w.add_system(DeleteSystem())
 
 w.add_system(RenderSystem(mode="FULL"))
 
-round_nbr = 30
 
-for i in range(round_nbr):
+def wait_for_key():
+    print("[italic][bright_black]Appuyez sur une touche pour continuer...[/bright_black][/italic]")
+    keyboard.wait("space")
+
+
+game_running = True
+while game_running:
     w.update()
-    
+    wait_for_key()

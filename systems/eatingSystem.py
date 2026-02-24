@@ -1,8 +1,14 @@
+import random
+
 from components.base import Delete
 
 class EatingSystem:
     def update(self, entities, world_state):
-        for e in entities:
+
+        shuffled_entities = list(entities)
+        random.shuffle(shuffled_entities)
+
+        for e in shuffled_entities:
             action = e.get_comp("ActionRequest")
             hunger = e.get_comp("Hunger")
             inv = e.get_comp("Inventory")
