@@ -8,9 +8,12 @@ class HealthSystem:
                 continue
 
             hunger = e.get_comp("Hunger")
-            if hunger and hunger.current == 0:
-                health.current_health -= 1
+            clocks = world_state["engine"].get_comp("GameClock")
+            if world_state.get("new_hour_pulse") and clocks.hours % 6 == 0:
+                if hunger and hunger.current <= 0:
+                    health.current_health -= 1
             
+
             if health.current_health <= 0:
                 health.current_health = 0
                 if not e.get_comp("Dead"):

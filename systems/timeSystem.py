@@ -1,9 +1,22 @@
 class TimeSystem:
     def update(self, entities, world_state):
-        clock_entity = next((e for e in entities if e.has_comp("GameClock")), None)
-        if not clock_entity: return
 
-        clock = clock_entity.get_comp("GameClock")
+        engine = world_state["engine"]
+        if not engine: return
+
+        clock = engine.get_comp("GameClock")
+
+        last_hour = world_state.get("last_hour", clock.hours - 1)
+
+        world_state["new_hour_pulse"] = False
+        world_state["new_day_pulse"] = False
+
+        if clock.hours != last_hour:
+            world_state["new_hour_pulse"] = True
+            world_state["last_hour"] = clock.hours
+        
+            if clock.hours == 0:
+                world_state["new_day_pulse"] = True
         
         clock.tick += 1
         clock.minutes += 10

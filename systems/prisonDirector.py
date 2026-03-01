@@ -15,7 +15,7 @@ class PrisonDirector:
         clock = world_state["engine"].get_comp("GameClock")
 
 
-        if clock.tick % 5 == 0:
+        if clock.tick % 50 == 0:
             bread = self.factory.create_item("Miche de pain", "FOOD")
             bread.add_comp(Position(location_name="Prison", at_entity=entity_location))
             world_state["world"].entities.append(bread)

@@ -14,6 +14,8 @@ class EatingSystem:
             inv = e.get_comp("Inventory")
             pos = e.get_comp("Position")
 
+            if e.get_comp("Dead"): continue
+
             if not (action and hunger):
                 continue
 
