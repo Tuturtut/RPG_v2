@@ -3,7 +3,7 @@ class World:
     def __init__(self):
         self.entities = []
         self.systems = []
-        self.global_state = {
+        self.world_state = {
             "is_raining": False,
             "war_declared": False,
             "world": self,
@@ -21,6 +21,4 @@ class World:
     def update(self):
         """Fait tourner chaque système l'un après l'autre."""
         for system in self.systems:
-            system.update(self.entities, self.global_state)
-
-        self.global_state["tick"] += 1
+            system.update(self.entities, self.world_state)

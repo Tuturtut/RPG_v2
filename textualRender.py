@@ -2,8 +2,9 @@ from rich.text import Text
 from rich.console import Console
 
 class TextualRender:
-    def __init__(self, mode="FULL"):
+    def __init__(self, world_state, mode="FULL"):
         self.mode = mode
+        self.world_state = world_state
 
     def get_pnj_view(self, entities):
         """Retourne la string formatée pour le widget pnj_view."""
@@ -13,6 +14,12 @@ class TextualRender:
         areas = [e for e in entities if e.get_comp("Area")]
         actors = [e for e in entities if not e.get_comp("Area") and e.has_comp("Health")]
         items = [e for e in entities if e.get_comp("Item")]
+        engine = self.world_state["engine"]
+        if engine.has_comp("GameClock"):
+            clock = engine.get_comp("GameClock")
+            self.world_state["logs"].append(f"[{clock.time}]")
+
+            output.append(f"[bold white]─── TOUR {clock.tick} ───[/bold white] [{clock.time}]")
 
         # 2. LIEUX
         for a in areas:

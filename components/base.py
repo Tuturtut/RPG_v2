@@ -21,3 +21,19 @@ class ActionRequest:
     type: str
     priority: int
 
+from dataclasses import dataclass
+
+@dataclass
+class GameClock:
+    tick: int = 0
+    minutes: int = 0
+    hours: int = 8
+    days: int = 1
+
+    @property
+    def is_night(self):
+        return self.hours < 6 or self.hours > 20
+
+    @property
+    def time(self):
+        return f"{self.hours:02d}:{self.minutes:02d}"

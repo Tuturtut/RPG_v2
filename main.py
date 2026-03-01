@@ -2,14 +2,12 @@ from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, Static, RichLog
 from textual.containers import Container
 
-from factories.entityFactory import EntityFactory
-from systems.prisonDirector import PrisonDirector
 from textualRender import TextualRender
 
 from entity import Entity
 from world import World
 
-from components.base import Area, Position
+from components.base import Area, Position, GameClock
 from components.biology import Health, Hunger
 from components.economy import Inventory    
 
@@ -18,6 +16,12 @@ from systems.healthSystem import HealthSystem
 from systems.hungerSystem import HungerSystem
 from systems.eatingSystem import EatingSystem
 from systems.deleteSystem import DeleteSystem
+from systems.timeSystem import TimeSystem
+
+from systems.prisonDirector import PrisonDirector
+
+from factories.entityFactory import EntityFactory
+
 
 class App(App):
     BINDINGS = [("space", "next_turn", "Jour suivant"), ("q", "quit", "Quitter")]
@@ -40,7 +44,11 @@ class App(App):
 
         self.world = World()
 
-        self.renderer = TextualRender(mode="FULL")
+        self.renderer = TextualRender(self.world.world_state, mode="FULL")
+
+        world_engine = Entity("Moteur du monde")
+        world_engine.add_comp(GameClock())
+
 
         prison = Entity("Prison")
         prison.add_comp(Area())
@@ -64,10 +72,16 @@ class App(App):
         self.world.add_entity(the_old_one)
         self.world.add_entity(the_young_one)
 
+        self.world.add_entity(world_engine)
+        self.world.world_state["engine"] = world_engine
+
+
+        self.world.add_system(TimeSystem())
+
         self.world.add_system(HealthSystem())
         self.world.add_system(HungerSystem())
         self.world.add_system(EatingSystem())
-        self.world.add_system(PrisonDirector(entity_factory=EntityFactory(world_state=self.world.global_state)))
+        self.world.add_system(PrisonDirector(entity_factory=EntityFactory(world_state=self.world.world_state)))
 
         self.world.add_system(DeleteSystem())
 
@@ -92,18 +106,18 @@ class App(App):
         log_view = self.query_one("#logs", RichLog)
         
         # On affiche le tour actuel
-        log_view.write(f"\n─── TOUR {self.world.global_state.get('tick')} ───")
+        log_view.write(f"\n─── TOUR {self.world.world_state.get('tick')} ───")
         
         # On vide les chroniques vers le log_view
-        if "chronicles" in self.world.global_state:
-            for log in self.world.global_state["chronicles"]:
+        if "chronicles" in self.world.world_state:
+            for log in self.world.world_state["chronicles"]:
                 log_view.write(f"“{log}”")
-            self.world.global_state["chronicles"] = [] # On vide après affichage
+            self.world.world_state["chronicles"] = [] # On vide après affichage
         
-        if "logs" in self.world.global_state:
-            for log in self.world.global_state["logs"]:
-                log_view.write(f"“{log}”")
-            self.world.global_state["logs"] = []
+        if "logs" in self.world.world_state:
+            for log in self.world.world_state["logs"]:
+                log_view.write(f"{log}")
+            self.world.world_state["logs"] = []
 
     
 if __name__ == "__main__":
