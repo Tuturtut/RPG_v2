@@ -104,9 +104,11 @@ class App(App):
 
         # 3. On met à jour les Logs (Colone de droite)
         log_view = self.query_one("#logs", RichLog)
+
+        tick = self.world.world_state["engine"].get_comp("GameClock").tick
         
         # On affiche le tour actuel
-        log_view.write(f"\n─── TOUR {self.world.world_state.get('tick')} ───")
+        log_view.write(f"\n─── TOUR {tick} ───")
         
         # On vide les chroniques vers le log_view
         if "chronicles" in self.world.world_state:

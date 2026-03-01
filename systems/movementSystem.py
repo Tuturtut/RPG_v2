@@ -1,4 +1,4 @@
-class MoveSystem:
+class MovementSystem:
     def update(self, entities, world_state):
         for e in entities:
             if e.get_comp("Dead"): continue

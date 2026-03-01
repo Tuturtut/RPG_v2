@@ -19,7 +19,7 @@ class TextualRender:
             clock = engine.get_comp("GameClock")
             self.world_state["logs"].append(f"[{clock.time}]")
 
-            output.append(f"[bold white]─── TOUR {clock.tick} ───[/bold white] [{clock.time}]")
+            output.append(f"[bold white]─── JOUR {clock.days} ───[/bold white] [{clock.time}]")
 
         # 2. LIEUX
         for a in areas:
