@@ -24,9 +24,13 @@ class TextualRender:
         
         # 4. OBJETS AU SOL
         if items:
-            output.append("\n[italic white]Objets au sol :[/]")
+            output.append("\n[italic white]Objets : [/]")
             for i in items:
-                output.append(f" [yellow]○[/] {i.name}")
+                loc = ""
+                if i.get_comp("Position"):
+                    loc = f" @{i.get_comp('Position').location_name}"
+                output.append(f" [goldenrod]○[/] {i.name} [navy]{loc}[/navy]")
+
 
         return "\n".join(output)
 
@@ -37,7 +41,7 @@ class TextualRender:
         
         if dead:
             loc = f" @{pos.location_name}" if pos else ""
-            return f"[bright_black]▶ {e.name.upper()} {loc} (Décédé)[/bright_black]"
+            return f"[grey]▶ {e.name.upper()} {loc} (Décédé)[/grey]"
 
         header = self._build_header(e)
         details = self._build_details(e)
@@ -51,13 +55,13 @@ class TextualRender:
         mov = e.get_comp("Movement")
         act = e.get_comp("ActionRequest")
         
-        name_part = f"[green]▶ {e.name.upper()}[/green]"
+        name_part = f"[orange]▶ {e.name.upper()}[/orange]"
         pos_part = ""
         if pos:
             if mov:
-                pos_part = f" [blue]@{pos.location_name} ➔ {mov.direction.name}[/blue]"
+                pos_part = f" [navy]@{pos.location_name} ➔ {mov.direction.name}[/navy]"
             else:
-                pos_part = f" [blue]@{pos.location_name}[/blue]"
+                pos_part = f" [navy]@{pos.location_name}[/navy]"
 
         act_part = f" [yellow][{act.type.lower()}][/yellow]" if act else ""
         return f"{name_part}{pos_part}{act_part}"
@@ -90,7 +94,7 @@ class TextualRender:
 
     def _color_stat(self, current, max_val):
         ratio = current / max_val if max_val > 0 else 0
-        color = "green"
-        if ratio < 0.3: color = "red"
-        elif ratio < 0.6: color = "yellow"
+        color = "darkgreen"
+        if ratio < 0.3: color = "crimson"
+        elif ratio < 0.6: color = "goldenrod"
         return f"[{color}]{current}/{max_val}[/{color}]"

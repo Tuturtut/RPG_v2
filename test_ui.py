@@ -2,6 +2,8 @@ from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, Static, RichLog
 from textual.containers import Container
 
+from factories.entityFactory import EntityFactory
+from systems.prisonDirector import PrisonDirector
 from textualRender import TextualRender
 
 from entity import Entity
@@ -58,12 +60,14 @@ class App(App):
         # the_young_one.add_comp(Inventory())
         # the_young_one.add_comp(Mindset(trait="unstable"))
 
+        self.world.add_entity(prison)
         self.world.add_entity(the_old_one)
         self.world.add_entity(the_young_one)
 
         self.world.add_system(HealthSystem())
         self.world.add_system(HungerSystem())
         self.world.add_system(EatingSystem())
+        self.world.add_system(PrisonDirector(entity_factory=EntityFactory(world_state=self.world.global_state)))
 
         self.world.add_system(DeleteSystem())
 
@@ -88,13 +92,18 @@ class App(App):
         log_view = self.query_one("#logs", RichLog)
         
         # On affiche le tour actuel
-        log_view.write(f"\n[bold white]─── TOUR {self.world.global_state.get('tick')} ───[/]")
+        log_view.write(f"\n─── TOUR {self.world.global_state.get('tick')} ───")
         
         # On vide les chroniques vers le log_view
         if "chronicles" in self.world.global_state:
             for log in self.world.global_state["chronicles"]:
-                log_view.write(f" [antiquewhite1]“{log}”[/]")
+                log_view.write(f"“{log}”")
             self.world.global_state["chronicles"] = [] # On vide après affichage
+        
+        if "logs" in self.world.global_state:
+            for log in self.world.global_state["logs"]:
+                log_view.write(f"“{log}”")
+            self.world.global_state["logs"] = []
 
     
 if __name__ == "__main__":

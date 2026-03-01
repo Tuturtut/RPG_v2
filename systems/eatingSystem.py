@@ -19,18 +19,18 @@ class EatingSystem:
 
             if action and action.type == "EAT_FOOD":
                 item_to_eat = None
-            
                 if pos and pos.at_entity:
                     for item in entities:
                         item_data = item.get_comp("Item")
                         item_pos = item.get_comp("Position")
+                        
 
                         if not item_data: continue
                         if not item_pos: continue
 
                         if item.get_comp("Position").at_entity == pos.at_entity:
-
                             if item.has_comp("Delete"): continue
+
                             item_data = item.get_comp("Item")
                             if item_data:
                                 if item_data.type == "FOOD":

@@ -8,7 +8,8 @@ class World:
             "war_declared": False,
             "world": self,
             "tick": 0,
-            "chronicles": []
+            "chronicles": [],
+            "logs": []
         }
 
     def add_entity(self, entity):
