@@ -29,38 +29,42 @@ class TextualRender:
         # 3. ACTEURS
         for actor in actors:
             a = entities[actor]
-            output.append(self.render_entity(a))
+            output.append(self.render_entity(a, entities))
         
         # 4. OBJETS AU SOL
         if items:
             output.append("\n[italic white]Objets : [/]")
             for item in items:
                 i = entities[item]
+                pos = i.get_comp("Position")
                 loc = ""
-                if i.get_comp("Position"):
-                    loc = f" @{i.get_comp('Position').location_name}"
+                if pos:
+                    target_id = pos.at_entity_id
+                    area_entity = entities.get(target_id)
+                    loc = area_entity.name if area_entity else "Inconnu"
                 output.append(f" [goldenrod]○[/] {i.name} [navy]{loc}[/navy]")
 
 
         return "\n".join(output)
 
-    def render_entity(self, e):
+    def render_entity(self, e, entities):
         """Identique à ton ancien code, mais retourne la string."""
         dead = e.get_comp("Dead")
         pos = e.get_comp("Position")
+        area_entity = entities.get(pos.at_entity_id)
         
-        if dead:
-            loc = f" @{pos.location_name}" if pos else ""
+        if dead and area_entity:
+            loc = f"@{area_entity.name}" if pos else ""
             return f"[grey]▶ {e.name.upper()} {loc} (Décédé)[/grey]"
 
-        header = self._build_header(e)
+        header = self._build_header(e, entities)
         details = self._build_details(e)
         
         if details:
             return f"{header}\n{details}\n"
         return f"{header}\n"
 
-    def _build_header(self, e):
+    def _build_header(self, e, entities):
         pos = e.get_comp("Position")
         mov = e.get_comp("Movement")
         act = e.get_comp("ActionRequest")
@@ -68,10 +72,14 @@ class TextualRender:
         name_part = f"[orange]▶ {e.name.upper()}[/orange]"
         pos_part = ""
         if pos:
+            target_id = pos.at_entity_id
+            area_entity = entities.get(target_id)
+            area_display_name = area_entity.name if area_entity else "Inconnu"
+
             if mov:
-                pos_part = f" [navy]@{pos.location_name} ➔ {mov.direction.name}[/navy]"
+                pos_part = f" [navy]@{area_display_name} ➔ {mov.direction.name}[/navy]"
             else:
-                pos_part = f" [navy]@{pos.location_name}[/navy]"
+                pos_part = f" [navy]@{area_display_name}[/navy]"
 
         act_part = f" [yellow][{act.type.lower()}][/yellow]" if act else ""
         return f"{name_part}{pos_part}{act_part}"

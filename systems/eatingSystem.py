@@ -22,7 +22,7 @@ class EatingSystem:
 
             if action and action.type == "EAT_FOOD":
                 item_to_eat = None
-                if pos and pos.at_entity:
+                if pos and pos.at_entity_id:
                     for i in entities:
                         item = entities[i]
                         item_data = item.get_comp("Item")
@@ -32,7 +32,7 @@ class EatingSystem:
                         if not item_data: continue
                         if not item_pos: continue
 
-                        if item.get_comp("Position").at_entity == pos.at_entity:
+                        if item.get_comp("Position").at_entity_id == pos.at_entity_id:
                             if item.has_comp("Delete"): continue
 
                             item_data = item.get_comp("Item")

@@ -46,34 +46,25 @@ class App(App):
 
         self.renderer = TextualRender(self.world.world_state, mode="FULL")
 
-        world_engine = Entity("Moteur du monde", id="world_engine")
-        world_engine.add_comp(GameClock())
+        world_engine_id = self.world.create_entity(id="world_engine", name="Moteur du monde")
+        self.world.add_comp(world_engine_id, GameClock())
+
+        prison_id = self.world.create_entity(id="prison", name="Prison")
+        self.world.add_comp(prison_id, Area())
+        self.world.add_tag(prison_id, "bread_spawn_location")
+
+        the_old_one_id = self.world.create_entity(id="the_old_one", name="L'encien")
+        self.world.add_comp(the_old_one_id, Position(at_entity_id=prison_id))
+        self.world.add_comp(the_old_one_id, Health(current_health=8, max_health=10))
+        self.world.add_comp(the_old_one_id, Hunger(current=7, max_val=10))
 
 
-        prison = Entity("Prison", id="prison")
-        prison.add_comp(Area())
-        prison.add_tag("bread_spawn_location")
+        the_young_one_id = self.world.create_entity(id="the_young_one", name="Le jeune")
+        self.world.add_comp(the_young_one_id, Position(at_entity_id=prison_id))
+        self.world.add_comp(the_young_one_id, Health(current_health=10, max_health=10))
+        self.world.add_comp(the_young_one_id, Hunger(current=10, max_val=10))
 
-        the_old_one = Entity("L'encien", id="the_old_one")
-        the_old_one.add_comp(Position(location_name="Prison", at_entity=prison))
-        the_old_one.add_comp(Health(current_health=8, max_health=10))
-        the_old_one.add_comp(Hunger(current=7, max_val=10))
-        # the_old_one.add_comp(Inventory())
-        # the_old_one.add_comp(Mindset(trait="stoic"))
-
-        the_young_one = Entity("Le jeune", id="the_young_one")
-        the_young_one.add_comp(Position(location_name="Prison", at_entity=prison))
-        the_young_one.add_comp(Health(current_health=10, max_health=10))
-        the_young_one.add_comp(Hunger(current=10, max_val=10))
-        # the_young_one.add_comp(Inventory())
-        # the_young_one.add_comp(Mindset(trait="unstable"))
-
-        self.world.add_entity(prison)
-        self.world.add_entity(the_old_one)
-        self.world.add_entity(the_young_one)
-
-        self.world.add_entity(world_engine)
-        self.world.world_state["engine"] = world_engine
+        self.world.world_state["engine"] = self.world.entities[world_engine_id]
 
 
         self.world.add_system(TimeSystem())

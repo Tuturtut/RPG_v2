@@ -6,19 +6,22 @@ class PrisonDirector:
 
 
     def update(self, entities, world_state):
-        entity_location = None
+        spawn_area_id = None
 
-        for entity in world_state["world"].entities:
-            e = entities[entity]
+        for eid, e in entities.items():
             if e.get_comp("Area") and e.has_tag("bread_spawn_location"):
-                entity_location = e
+                spawn_area_id = eid
+                break
+
+        if not spawn_area_id:
+            return
         
         clock = world_state["engine"].get_comp("GameClock")
 
 
         if clock.tick % 50 == 0:
             bread = self.factory.create_item("Miche de pain", "FOOD")
-            bread.add_comp(Position(location_name="Prison", at_entity=entity_location))
+            bread.add_comp(Position(at_entity_id=spawn_area_id))
             world_state["world"].entities[bread.id] = bread
 
             world_state["chronicles"].append("Une miche de pain tombe lourdement sur le sol froid.")

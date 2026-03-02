@@ -8,10 +8,13 @@ class Delete:
 
 @dataclass
 class Position:
-    location_name: str
-    at_entity: any = None
+    at_entity_id: any = None
     is_in_transit: bool = False
     is_held_by: any = None
+
+@dataclass
+class Exits:
+    connections: dict
 
 @dataclass
 class Movement:
