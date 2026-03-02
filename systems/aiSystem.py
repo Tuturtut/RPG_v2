@@ -6,8 +6,8 @@ from rich import print
 class AISystem:
     """Gère le comportement des PNJ selon la météo et la guerre."""
     def update(self, entities, world_state):
-        for e in entities:
-
+        for entity in entities:
+            e = entities[entity]
             if e.get_comp("Dead"): continue
 
 

@@ -4,7 +4,8 @@ from components.base import Delete
 class TradeSystem:
     def update(self, entities, world_state):
         # On cherche les "entités-tickets" de transaction
-        for ticket in entities:
+        for t in entities:
+            ticket = entities[t]
             request = ticket.get_comp("TradeRequest")
             
             if not request or request.status != "PENDING":

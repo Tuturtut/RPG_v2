@@ -5,7 +5,8 @@ class HungerSystem:
     def update(self, entities, world_state):
 
 
-        for e in entities:
+        for entity in entities:
+            e = entities[entity]
             if e.get_comp("Dead"): continue
 
             hunger = e.get_comp("Hunger")

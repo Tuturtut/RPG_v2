@@ -1,6 +1,7 @@
 class MovementSystem:
     def update(self, entities, world_state):
-        for e in entities:
+        for entity in entities:
+            e = entities[entity]
             if e.get_comp("Dead"): continue
 
             movement = e.get_comp("Movement")

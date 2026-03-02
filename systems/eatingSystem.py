@@ -8,7 +8,8 @@ class EatingSystem:
         shuffled_entities = list(entities)
         random.shuffle(shuffled_entities)
 
-        for e in shuffled_entities:
+        for entity in shuffled_entities:
+            e = entities[entity]
             action = e.get_comp("ActionRequest")
             hunger = e.get_comp("Hunger")
             inv = e.get_comp("Inventory")
@@ -22,7 +23,8 @@ class EatingSystem:
             if action and action.type == "EAT_FOOD":
                 item_to_eat = None
                 if pos and pos.at_entity:
-                    for item in entities:
+                    for i in entities:
+                        item = entities[i]
                         item_data = item.get_comp("Item")
                         item_pos = item.get_comp("Position")
                         

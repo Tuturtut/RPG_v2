@@ -10,6 +10,8 @@ class Delete:
 class Position:
     location_name: str
     at_entity: any = None
+    is_in_transit: bool = False
+    is_held_by: any = None
 
 @dataclass
 class Movement:

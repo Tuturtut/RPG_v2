@@ -2,7 +2,8 @@ from components.biology import Dead
 
 class HealthSystem:
     def update(self, entities, world_state):
-        for e in entities:
+        for entity in entities:
+            e = entities[entity]
             health = e.get_comp("Health")
             if not health:
                 continue

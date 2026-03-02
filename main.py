@@ -46,22 +46,22 @@ class App(App):
 
         self.renderer = TextualRender(self.world.world_state, mode="FULL")
 
-        world_engine = Entity("Moteur du monde")
+        world_engine = Entity("Moteur du monde", id="world_engine")
         world_engine.add_comp(GameClock())
 
 
-        prison = Entity("Prison")
+        prison = Entity("Prison", id="prison")
         prison.add_comp(Area())
         prison.add_tag("bread_spawn_location")
 
-        the_old_one = Entity("L'encien")
+        the_old_one = Entity("L'encien", id="the_old_one")
         the_old_one.add_comp(Position(location_name="Prison", at_entity=prison))
         the_old_one.add_comp(Health(current_health=8, max_health=10))
         the_old_one.add_comp(Hunger(current=7, max_val=10))
         # the_old_one.add_comp(Inventory())
         # the_old_one.add_comp(Mindset(trait="stoic"))
 
-        the_young_one = Entity("Le jeune")
+        the_young_one = Entity("Le jeune", id="the_young_one")
         the_young_one.add_comp(Position(location_name="Prison", at_entity=prison))
         the_young_one.add_comp(Health(current_health=10, max_health=10))
         the_young_one.add_comp(Hunger(current=10, max_val=10))

@@ -11,9 +11,9 @@ class TextualRender:
         output = []
         
         # 1. RÉCUPÉRATION DES LIEUX ET ACTEURS
-        areas = [e for e in entities if e.get_comp("Area")]
-        actors = [e for e in entities if not e.get_comp("Area") and e.has_comp("Health")]
-        items = [e for e in entities if e.get_comp("Item")]
+        areas = [e for e in entities if entities[e].get_comp("Area")]
+        actors = [e for e in entities if not entities[e].get_comp("Area") and entities[e].has_comp("Health")]
+        items = [e for e in entities if entities[e].get_comp("Item")]
         engine = self.world_state["engine"]
         if engine.has_comp("GameClock"):
             clock = engine.get_comp("GameClock")
@@ -22,17 +22,20 @@ class TextualRender:
             output.append(f"[bold white]─── JOUR {clock.days} ───[/bold white] [{clock.time}]")
 
         # 2. LIEUX
-        for a in areas:
+        for area in areas:
+            a = entities[area]
             output.append(f"[blue b]{a.name.upper()}[/blue b]")
 
         # 3. ACTEURS
-        for e in actors:
-            output.append(self.render_entity(e))
+        for actor in actors:
+            a = entities[actor]
+            output.append(self.render_entity(a))
         
         # 4. OBJETS AU SOL
         if items:
             output.append("\n[italic white]Objets : [/]")
-            for i in items:
+            for item in items:
+                i = entities[item]
                 loc = ""
                 if i.get_comp("Position"):
                     loc = f" @{i.get_comp('Position').location_name}"

@@ -10,9 +10,9 @@ class RenderSystem:
         print(f"\n[bold white]─── TOUR {world_state.get('tick', 0)} ───[/bold white]")
 
         # 1. RÉCUPÉRATION DES DONNÉES
-        areas = [e for e in entities if e.get_comp("Area")]
-        actors = [e for e in entities if not e.get_comp("Area") and not e.get_comp("Trade_Request") and e.has_comp("Health")]
-        items = [e for e in entities if e.get_comp("Item")]
+        areas = [e for e in entities if entities[e].get_comp("Area")]
+        actors = [e for e in entities if not entities[e].get_comp("Area") and not entities[e].get_comp("Trade_Request") and entities[e].has_comp("Health")]
+        items = [e for e in entities if entities[e].get_comp("Item")]
         logs = world_state.get("chronicles", []) # On récupère les phrases du Traducteur
 
         # 2. AFFICHAGE DU JOURNAL (Si mode LOG_ONLY ou FULL)
@@ -30,16 +30,19 @@ class RenderSystem:
         # 3. AFFICHAGE DES LIEUX (Si mode MAP ou FULL)
         if self.mode in ["MAP", "FULL"]:
             for a in areas:
-                print(f"[blue]{a.name.upper()}[/blue]")
+                area = entities[a]
+                print(f"[blue]{area.name.upper()}[/blue]")
 
         # 4. AFFICHAGE DES ACTEURS (Sauf si mode MAP)
         if self.mode in ["ACTORS_ONLY", "FULL"]:
             for e in actors:
-                self.render_entity(e)
+                actor = entities[e]
+                self.render_entity(actor)
         
         if self.mode in ["ITEMS_ONLY", "FULL"]:
             for e in items:
-                self.render_entity(e)
+                item = entities[e]
+                self.render_entity(item)
 
     def render_entity(self, e):
         dead = e.get_comp("Dead")

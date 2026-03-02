@@ -9,7 +9,7 @@ class EntityFactory:
 
     def create_item(self, name, item_type):
         """Crée un objet physique (comme du pain)."""
-        item_ent = Entity(name)
+        item_ent = Entity(name, id=name+"_"+item_type+"_"+str(len(self.world_state["world"].entities)))
         # On ajoute les composants de base pour un objet
         item_ent.add_comp(Item(type=item_type))
         # On ne met pas de Position ici, on laisse le Director s'en charger 

@@ -1,8 +1,9 @@
 class Entity:
-    def __init__(self, name):
+    def __init__(self, name, id):
         self.name = name
         self.components = {}
         self.tags = set()
+        self.id = id
     
     def get_name(self):
         return f"[green]{self.name.upper()}[/green]"

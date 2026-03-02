@@ -1,5 +1,11 @@
 class DeleteSystem:
     def update(self, entities, world_state):
-        for e in entities:
+        to_delete = []
+
+        for entity in entities:
+            e = entities[entity]
             if e.get_comp("Delete"):
-                entities.remove(e)
+                to_delete.append(entity)
+        
+        for entity in to_delete:
+            entities.pop(entity, None)
