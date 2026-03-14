@@ -26,8 +26,6 @@ class ActionRequest:
     type: str
     priority: int
 
-from dataclasses import dataclass
-
 @dataclass
 class GameClock:
     tick: int = 0
