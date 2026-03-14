@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 
-
+@dataclass
 class Health:
-    def __init__(self, current_health, max_health):
-        self.current_health = current_health
-        self.max_health = max_health
+    current: int = 20
+    max_val: int = 20
 
 
 @dataclass

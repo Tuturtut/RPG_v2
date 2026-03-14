@@ -95,7 +95,7 @@ class TextualRender:
 
         lines = []
         stats = []
-        if health: stats.append(f"HP {self._color_stat(health.current_health, health.max_health)}")
+        if health: stats.append(f"HP {self._color_stat(health.current, health.max_val)}")
         if hunger: stats.append(f"Faim {self._color_stat(hunger.current, hunger.max_val)}")
         if stats: lines.append(f"  └─ {' | '.join(stats)}")
 

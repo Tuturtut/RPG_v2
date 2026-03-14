@@ -49,30 +49,47 @@ class App(App):
         world_engine_id = self.world.create_entity(id="world_engine", name="Moteur du monde")
         self.world.add_comp(world_engine_id, GameClock())
 
-        prison_id = self.world.create_entity(id="prison", name="Prison")
-        self.world.add_comp(prison_id, Area())
-        self.world.add_tag(prison_id, "bread_spawn_location")
-
-        the_old_one_id = self.world.create_entity(id="the_old_one", name="L'encien")
-        self.world.add_comp(the_old_one_id, Position(at_entity_id=prison_id))
-        self.world.add_comp(the_old_one_id, Health(current_health=8, max_health=10))
-        self.world.add_comp(the_old_one_id, Hunger(current=7, max_val=10))
-
-
-        the_young_one_id = self.world.create_entity(id="the_young_one", name="Le jeune")
-        self.world.add_comp(the_young_one_id, Position(at_entity_id=prison_id))
-        self.world.add_comp(the_young_one_id, Health(current_health=10, max_health=10))
-        self.world.add_comp(the_young_one_id, Hunger(current=10, max_val=10))
-
         self.world.world_state["engine"] = self.world.entities[world_engine_id]
+
+
+        tavern_id = self.world.create_entity(id="tavern", name="Taverne")
+        self.world.add_comp(tavern_id, Area())
+
+        tavern_keeper_id = self.world.create_entity("tavern_keeper", "Tavern Keeper")
+        self.world.add_comp(tavern_keeper_id, Position(tavern_id))
+        self.world.add_comp(tavern_keeper_id, Health())
+
+        knight_id = self.world.create_entity(id="knight", name="Knight")
+        self.world.add_comp(knight_id, Position(tavern_id))
+        self.world.add_comp(knight_id, Health())
+        
+        squire_id = self.world.create_entity(id="squire", name="Squire")
+        self.world.add_comp(squire_id, Position(tavern_id))
+        self.world.add_comp(squire_id, Health())
+
+
+        # prison_id = self.world.create_entity(id="prison", name="Prison")
+        # self.world.add_comp(prison_id, Area())
+        # self.world.add_tag(prison_id, "bread_spawn_location")
+
+        # the_old_one_id = self.world.create_entity(id="the_old_one", name="L'encien")
+        # self.world.add_comp(the_old_one_id, Position(at_entity_id=prison_id))
+        # self.world.add_comp(the_old_one_id, Health(current_health=8, max_health=10))
+        # self.world.add_comp(the_old_one_id, Hunger(current=7, max_val=10))
+
+
+        # the_young_one_id = self.world.create_entity(id="the_young_one", name="Le jeune")
+        # self.world.add_comp(the_young_one_id, Position(at_entity_id=prison_id))
+        # self.world.add_comp(the_young_one_id, Health(current_health=10, max_health=10))
+        # self.world.add_comp(the_young_one_id, Hunger(current=10, max_val=10))
+
 
 
         self.world.add_system(TimeSystem())
 
-        self.world.add_system(HealthSystem())
-        self.world.add_system(HungerSystem())
-        self.world.add_system(EatingSystem())
-        self.world.add_system(PrisonDirector(entity_factory=EntityFactory(world_state=self.world.world_state)))
+        # self.world.add_system(HealthSystem())
+        # self.world.add_system(HungerSystem())
+        # self.world.add_system(EatingSystem())
 
         self.world.add_system(DeleteSystem())
 
