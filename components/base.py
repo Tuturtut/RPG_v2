@@ -18,7 +18,12 @@ class Exits:
 
 @dataclass
 class Movement:
-    direction: str
+    target_entity_id: any
+
+@dataclass
+class Schedule:
+    tasks: list
+    current_task_index: int = 0
 
 
 @dataclass

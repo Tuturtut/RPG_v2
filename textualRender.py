@@ -92,6 +92,7 @@ class TextualRender:
         health = e.get_comp("Health")
         hunger = e.get_comp("Hunger")
         mindset = e.get_comp("Mindset")
+        schedule = e.get_comp("Schedule")
 
         lines = []
         stats = []
@@ -107,6 +108,12 @@ class TextualRender:
         if inv and inv.items:
             items_str = " ".join([f"[white][{i.name}][/white]" for i in inv.items])
             lines.append(f"  └─ inv {items_str}")
+
+        if schedule and schedule.tasks:
+            current_task = schedule.tasks[schedule.current_task_index]
+            if current_task:
+                task_time, task_name = current_task
+                lines.append(f"  └─ [cyan]Tâche :[/cyan] {task_name} ({task_time:02d}:00)")
 
         return "\n".join(lines) if lines else None
 

@@ -2,25 +2,24 @@ from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, Static, RichLog
 from textual.containers import Container
 
+from systems.movementSystem import MovementSystem
+from systems.scheduleSystem import ScheduleSystem
 from textualRender import TextualRender
 
 from entity import Entity
 from world import World
 
-from components.base import Area, Position, GameClock
+from components.base import Area, Position, GameClock, Movement, Schedule
 from components.biology import Health, Hunger
 from components.economy import Inventory    
 
-from systems.renderSystem import RenderSystem
 from systems.healthSystem import HealthSystem
 from systems.hungerSystem import HungerSystem
 from systems.eatingSystem import EatingSystem
 from systems.deleteSystem import DeleteSystem
 from systems.timeSystem import TimeSystem
+from systems.talkingSystem import TalkingSystem
 
-from systems.prisonDirector import PrisonDirector
-
-from factories.entityFactory import EntityFactory
 
 
 class App(App):
@@ -54,43 +53,32 @@ class App(App):
 
         tavern_id = self.world.create_entity(id="tavern", name="Taverne")
         self.world.add_comp(tavern_id, Area())
+        self.world.add_tag(tavern_id, "tavern")
 
-        tavern_keeper_id = self.world.create_entity("tavern_keeper", "Tavern Keeper")
+        forest_id = self.world.create_entity(id="forest", name="Forêt")
+        self.world.add_comp(forest_id, Area())
+        self.world.add_tag(forest_id, "forest")
+
+        tavern_keeper_id = self.world.create_entity(id="tavern_keeper", name="Tavern Keeper")
         self.world.add_comp(tavern_keeper_id, Position(tavern_id))
         self.world.add_comp(tavern_keeper_id, Health())
+        self.world.add_tag(tavern_keeper_id, "innkeeper")
 
         knight_id = self.world.create_entity(id="knight", name="Knight")
-        self.world.add_comp(knight_id, Position(tavern_id))
+        self.world.add_comp(knight_id, Position(forest_id))
         self.world.add_comp(knight_id, Health())
+        self.world.add_comp(knight_id, Schedule(tasks=[(8, "walk_in_forest"), (12, "rest"), (16, "walk_in_forest")]))
+ 
         
         squire_id = self.world.create_entity(id="squire", name="Squire")
         self.world.add_comp(squire_id, Position(tavern_id))
         self.world.add_comp(squire_id, Health())
-
-
-        # prison_id = self.world.create_entity(id="prison", name="Prison")
-        # self.world.add_comp(prison_id, Area())
-        # self.world.add_tag(prison_id, "bread_spawn_location")
-
-        # the_old_one_id = self.world.create_entity(id="the_old_one", name="L'encien")
-        # self.world.add_comp(the_old_one_id, Position(at_entity_id=prison_id))
-        # self.world.add_comp(the_old_one_id, Health(current_health=8, max_health=10))
-        # self.world.add_comp(the_old_one_id, Hunger(current=7, max_val=10))
-
-
-        # the_young_one_id = self.world.create_entity(id="the_young_one", name="Le jeune")
-        # self.world.add_comp(the_young_one_id, Position(at_entity_id=prison_id))
-        # self.world.add_comp(the_young_one_id, Health(current_health=10, max_health=10))
-        # self.world.add_comp(the_young_one_id, Hunger(current=10, max_val=10))
-
-
+        self.world.add_tag(squire_id, "young")
 
         self.world.add_system(TimeSystem())
-
-        # self.world.add_system(HealthSystem())
-        # self.world.add_system(HungerSystem())
-        # self.world.add_system(EatingSystem())
-
+        self.world.add_system(ScheduleSystem())
+        self.world.add_system(MovementSystem())
+        self.world.add_system(TalkingSystem())
         self.world.add_system(DeleteSystem())
 
 
@@ -101,6 +89,11 @@ class App(App):
             yield Static("PNJ", id="pnj_view")
             yield RichLog(id="logs")
         yield Footer()
+
+    def take_other_area(self, current_area_id, areas):
+        other_areas = [area_id for area_id in areas if area_id != current_area_id]
+        return other_areas[0] if other_areas else None
+
     
     def action_next_turn(self):
         # 1. On fait tourner la simulation
@@ -115,13 +108,10 @@ class App(App):
 
         tick = self.world.world_state["engine"].get_comp("GameClock").tick
         
-        # On affiche le tour actuel
-        log_view.write(f"\n─── TOUR {tick} ───")
-        
         # On vide les chroniques vers le log_view
         if "chronicles" in self.world.world_state:
             for log in self.world.world_state["chronicles"]:
-                log_view.write(f"“{log}”")
+                log_view.write(f"{log}")
             self.world.world_state["chronicles"] = [] # On vide après affichage
         
         if "logs" in self.world.world_state:
@@ -129,7 +119,6 @@ class App(App):
                 log_view.write(f"{log}")
             self.world.world_state["logs"] = []
 
-    
 if __name__ == "__main__":
     app = App()
     app.run()
