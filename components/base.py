@@ -22,9 +22,26 @@ class Movement:
 
 @dataclass
 class Schedule:
-    tasks: list
-    current_task_index: int = 0
+    entries: dict = None
 
+    def get_current_activity(self, current_hour):
+
+        valid_hours = [
+            hour
+            for hour in self.entries
+            if hour <= current_hour
+        ]
+
+        if not valid_hours:
+            return None
+
+        latest_hour = max(valid_hours)
+
+        return self.entries[latest_hour]
+
+@dataclass
+class Goal:
+    value: str
 
 @dataclass
 class ActionRequest:

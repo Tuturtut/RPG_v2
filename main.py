@@ -2,8 +2,6 @@ from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, Static, RichLog
 from textual.containers import Container
 
-from systems.movementSystem import MovementSystem
-from systems.scheduleSystem import ScheduleSystem
 from textualRender import TextualRender
 
 from entity import Entity
@@ -19,6 +17,9 @@ from systems.eatingSystem import EatingSystem
 from systems.deleteSystem import DeleteSystem
 from systems.timeSystem import TimeSystem
 from systems.talkingSystem import TalkingSystem
+from systems.movementSystem import MovementSystem
+from systems.GoalResolutionSystem import GoalResolutionSystem
+from systems.scheduleSystem import ScheduleSystem
 
 
 
@@ -30,11 +31,11 @@ class App(App):
             grid-size: 2;
         }
         #pnj_view, #logs{
-            border: solid green;
+            border-left: solid gray;
             height: 100%;
             padding: 1;
             color: #FFFFFF;
-            background: #1e1e1e;
+            background: #111111;
         }"""
     
     DARK = True
@@ -67,7 +68,7 @@ class App(App):
         knight_id = self.world.create_entity(id="knight", name="Knight")
         self.world.add_comp(knight_id, Position(forest_id))
         self.world.add_comp(knight_id, Health())
-        self.world.add_comp(knight_id, Schedule(tasks=[(8, "walk_in_forest"), (12, "rest"), (16, "walk_in_forest")]))
+        self.world.add_comp(knight_id, Schedule(entries={8: "walk_in_forest", 12: "rest", 16: "walk_in_forest", 20: "rest"}))
  
         
         squire_id = self.world.create_entity(id="squire", name="Squire")
@@ -76,9 +77,10 @@ class App(App):
         self.world.add_tag(squire_id, "young")
 
         self.world.add_system(TimeSystem())
-        self.world.add_system(ScheduleSystem())
+        self.world.add_system(GoalResolutionSystem())
         self.world.add_system(MovementSystem())
         self.world.add_system(TalkingSystem())
+        self.world.add_system(ScheduleSystem())
         self.world.add_system(DeleteSystem())
 
 

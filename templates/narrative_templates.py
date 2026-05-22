@@ -84,16 +84,42 @@ DIALOGUES = {
                 "required_tags": ["rain"],
                 "forbidden_tags": ["combat"]
             },
+
             {
-                "texts":
-                    [
-                        "This forest is too dangerous, let's head to the tavern.",
-                        "I heard there is a good tavern nearby, let's go there."
-                    ]
-                ,
-                "required_tags": ["forest"],
+                "texts": [
+                    "It's nice to walk in the forest when it's not raining.",
+                    "The forest is peaceful when the weather is good."
+                ],
+                "required_tags": ["goal_walk_in_forest"],
                 "forbidden_tags": ["combat"]
-            }
+            },
+            {
+                "texts": [
+                    "I should rest at the tavern now.",
+                    "Time to head back to the tavern for some rest."
+                ],
+                "required_tags": ["goal_rest"],
+                "forbidden_tags": ["combat"]
+            },
+            {
+                "texts": [
+                    "I need to walk in the forest now.",
+                    "I should head to the forest now.",
+                    "I have some business to take care of in the forest."
+                ],
+                "required_tags": ["moving_to_forest"],
+                "forbidden_tags": ["combat"]
+            },
+                {
+                    "texts": [
+                        "I should rest now.",
+                        "I need to head back to the tavern for some rest.",
+                        "I have been walking in the forest for a while, it's time to rest."
+                    ],
+                    "required_tags": ["moving_to_tavern"],
+                    "forbidden_tags": ["combat"]
+                }
+
         ],
 
         "reply": [

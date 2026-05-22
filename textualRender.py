@@ -29,7 +29,8 @@ class TextualRender:
         # 3. ACTEURS
         for actor in actors:
             a = entities[actor]
-            output.append(self.render_entity(a, entities))
+            hour = clock.hours if engine.has_comp("GameClock") else None
+            output.append(self.render_entity(a, entities, hour=hour))
         
         # 4. OBJETS AU SOL
         if items:
@@ -47,7 +48,7 @@ class TextualRender:
 
         return "\n".join(output)
 
-    def render_entity(self, e, entities):
+    def render_entity(self, e, entities, hour=None):
         """Identique à ton ancien code, mais retourne la string."""
         dead = e.get_comp("Dead")
         pos = e.get_comp("Position")
@@ -58,7 +59,7 @@ class TextualRender:
             return f"[grey]▶ {e.name.upper()} {loc} (Décédé)[/grey]"
 
         header = self._build_header(e, entities)
-        details = self._build_details(e)
+        details = self._build_details(e, hour=hour)
         
         if details:
             return f"{header}\n{details}\n"
@@ -84,7 +85,7 @@ class TextualRender:
         act_part = f" [yellow][{act.type.lower()}][/yellow]" if act else ""
         return f"{name_part}{pos_part}{act_part}"
 
-    def _build_details(self, e):
+    def _build_details(self, e, hour=None):
         # ... Garde exactement ton code actuel pour _build_details et _color_stat ...
         # Copie-colle tes méthodes ici, elles fonctionnent parfaitement avec Textual !
         mood = e.get_comp("Mood")
@@ -109,12 +110,10 @@ class TextualRender:
             items_str = " ".join([f"[white][{i.name}][/white]" for i in inv.items])
             lines.append(f"  └─ inv {items_str}")
 
-        if schedule and schedule.tasks:
-            current_task = schedule.tasks[schedule.current_task_index]
-            if current_task:
-                task_time, task_name = current_task
-                lines.append(f"  └─ [cyan]Tâche :[/cyan] {task_name} ({task_time:02d}:00)")
-
+        if schedule and schedule.entries and hour is not None:
+            current_activity = schedule.get_current_activity(hour)
+            if current_activity:
+                lines.append(f"  └─ [cyan]Activité :[/cyan] {current_activity}")
         return "\n".join(lines) if lines else None
 
     def _color_stat(self, current, max_val):

@@ -1,3 +1,5 @@
+from components.base import Goal
+
 class ScheduleSystem:
     def update(self, entities, world_state):
         for entity_id, e in entities.items():
@@ -11,6 +13,12 @@ class ScheduleSystem:
 
             current_hour = game_clock.hours
 
-            for task_time, task_name in schedule.tasks:
-                if current_hour >= task_time:
-                    schedule.current_task_index = schedule.tasks.index((task_time, task_name))
+            activity = schedule.get_current_activity(current_hour)
+            if not activity:
+                continue
+
+            current_goal = e.get_comp("Goal")
+            if current_goal and current_goal.value == activity:
+                continue
+
+            e.add_comp(Goal(activity))

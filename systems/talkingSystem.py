@@ -71,6 +71,7 @@ class TalkingSystem:
         self.add_world_tags(tags, world_state)
         self.add_actor_tags(tags, entity)
         self.add_location_tags(tags, entity, world_state)
+        self.add_goal_tags(tags, entity, world_state)
 
         return tags
 
@@ -171,6 +172,20 @@ class TalkingSystem:
                 tags.add(location.id)
 
             tags.add(f"location_{self.slug(location.name)}")
+
+    def add_goal_tags(self, tags, entity, world_state):
+        goal = entity.get_comp("Goal")
+        if not goal:
+            return
+
+        goal_value = getattr(goal, "value", None)
+        if goal_value:
+            tags.add(f"goal_{self.slug(goal_value)}")
+
+        movement = entity.get_comp("Movement")
+        if movement:
+            tags.add("moving")
+            tags.add(f"moving_to_{self.slug(movement.target_entity_id)}")
 
     def get_random_dialogue(
         self,
