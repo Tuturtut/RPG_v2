@@ -7,7 +7,7 @@ from textualRender import TextualRender
 from entity import Entity
 from world import World
 
-from components.base import Area, Position, GameClock, Movement, Schedule
+from components.base import Area, Position, GameClock, Movement, Schedule, ScheduledAction, ScheduledActivity
 from components.biology import Health, Hunger
 from components.economy import Inventory    
 
@@ -17,8 +17,9 @@ from systems.eatingSystem import EatingSystem
 from systems.deleteSystem import DeleteSystem
 from systems.timeSystem import TimeSystem
 from systems.talkingSystem import TalkingSystem
+from systems.descriptionSystem import DescriptionSystem
 from systems.movementSystem import MovementSystem
-from systems.GoalResolutionSystem import GoalResolutionSystem
+from systems.goalResolutionSystem import GoalResolutionSystem
 from systems.scheduleSystem import ScheduleSystem
 
 
@@ -64,21 +65,36 @@ class App(App):
         self.world.add_comp(tavern_keeper_id, Position(tavern_id))
         self.world.add_comp(tavern_keeper_id, Health())
         self.world.add_tag(tavern_keeper_id, "innkeeper")
+        self.world.add_comp(tavern_keeper_id, Schedule(items=[
+            ScheduledAction(hour=8, action="open_tavern"),
+            ScheduledAction(hour=22, action="close_tavern"),
+            ScheduledActivity(start=8, end=22, activity="manage_tavern")
+        ]))
 
         knight_id = self.world.create_entity(id="knight", name="Knight")
         self.world.add_comp(knight_id, Position(forest_id))
         self.world.add_comp(knight_id, Health())
-        self.world.add_comp(knight_id, Schedule(entries={8: "walk_in_forest", 12: "rest", 16: "walk_in_forest", 20: "rest"}))
- 
-        
+        self.world.add_comp(knight_id, Schedule(items=[
+            ScheduledAction(hour=8, action="walk_in_forest"),
+            ScheduledAction(hour=12, action="eat"),
+            ScheduledAction(hour=16, action="walk_in_forest"),
+            ScheduledAction(hour=20, action="rest"),
+        ]))
+
         squire_id = self.world.create_entity(id="squire", name="Squire")
         self.world.add_comp(squire_id, Position(tavern_id))
         self.world.add_comp(squire_id, Health())
         self.world.add_tag(squire_id, "young")
+        self.world.add_comp(squire_id, Schedule(items=[
+            ScheduledActivity(start=8, end=12, activity="train"),
+            ScheduledAction(hour=12, action="eat"),
+            ScheduledActivity(start=13, end=17, activity="train"),
+        ]))
 
         self.world.add_system(TimeSystem())
         self.world.add_system(GoalResolutionSystem())
         self.world.add_system(MovementSystem())
+        self.world.add_system(DescriptionSystem())
         self.world.add_system(TalkingSystem())
         self.world.add_system(ScheduleSystem())
         self.world.add_system(DeleteSystem())

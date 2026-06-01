@@ -5,221 +5,143 @@ DIALOGUES = {
         "talk": [
             {
                 "texts": [
-                    "Quiet tonight...",
-                    "Not many travelers today."
+                   "Il n'y a pas grand monde ce matin, hein ?",
+                   "Vous cherchez quelque chose en particulier ?" 
                 ],
-                "required_tags": ["tavern", "evening"],
+                "required_tags": ["tavern", "morning", "tavern_open"],
+                "forbidden_tags": ["tavern_closed"]
+            },
+            {
+                "texts": [
+                   "Bienvenue à la taverne !",
+                   "Vous voulez boire un verre ?",
+                   "Vous avez faim ? J'ai de la bonne viande fraîche !",
+                   "Si vous voulez vous reposer, j'ai des chambres à louer."
+                ],
+                "required_tags": ["tavern", "afternoon", "tavern_open"],
+                "forbidden_tags": ["tavern_closed"]
+            },
+            {
+                "texts": [
+                    "Bonsoir... Vous cherchez un endroit où passer la nuit ?",
+                    "Je peux vous louer une chambre pour la nuit, si vous voulez."
+                ],
+                "required_tags": ["tavern", "evening", "tavern_open"],
+                "forbidden_tags": ["tavern_closed"]
+            },
+            {
+                "required_tags": ["tavern", "night", "tavern_open"],
+                "forbidden_tags": ["tavern_closed"],
+                "texts": [
+                    "Il est tard... Vous devriez trouver un endroit pour dormir.",
+                    "Je peux vous louer une chambre pour la nuit, si vous voulez."
+                ],
+            },
+            {
+                "required_tags": ["tavern", "tavern_closed"],
+                "forbidden_tags": ["tavern_open"],
+                "texts": [
+                    "Désolé, la taverne est fermée pour le moment.",
+                    "Revenez plus tard !",
+                    "Je ne peux pas vous servir pour le moment, la taverne est fermée."
+                ],
+            },
+        ],
+    },
+}
+
+
+DESCRIPTIONS = {
+
+    "Taverne": {
+
+        "ambient": [
+            {
+                "texts": [
+                    "La salle sent le bois ciré, la cendre froide et les restes de repas.",
+                    "Quelques chaises grincent doucement dans le calme de la taverne."
+                ],
+                "required_tags": ["tavern", "morning", "tavern_open"],
                 "forbidden_tags": ["combat"]
             },
             {
                 "texts": [
-                    "Late nights are exhausting.",
-                    "I should close earlier."
+                    "La taverne bruisse d'une activité tranquille, entre les tables et le comptoir.",
+                    "La lumière de l'après-midi découpe les poussières suspendues dans l'air."
+                ],
+                "required_tags": ["tavern", "afternoon", "tavern_open"],
+                "forbidden_tags": ["combat"]
+            },
+            {
+                "texts": [
+                    "Les ombres s'allongent entre les tables, et le feu devient le centre de la pièce.",
+                    "La taverne prend une couleur chaude, comme si la nuit attendait dehors."
+                ],
+                "required_tags": ["tavern", "evening", "tavern_open"],
+                "forbidden_tags": ["combat"]
+            },
+            {
+                "texts": [
+                    "La taverne est presque silencieuse. Seules les braises gardent la salle éveillée.",
+                    "Dans la pénombre, les tables vides semblent attendre le matin."
                 ],
                 "required_tags": ["tavern", "night"],
                 "forbidden_tags": ["combat"]
             },
             {
                 "texts": [
-                    "Rain scares travelers away.",
-                    "Wet boots, empty purses. Bad weather for business."
+                    "La porte de la taverne reste close, et le bâtiment paraît retenir son souffle.",
+                    "Derrière les volets fermés, rien ne bouge."
                 ],
-                "required_tags": ["tavern", "rain"],
-                "forbidden_tags": ["combat"]
+                "required_tags": ["tavern", "tavern_closed"],
+                "forbidden_tags": ["tavern_open", "combat"]
             },
-            {
-                "texts": [
-                    "War makes every cup taste bitter.",
-                    "People whisper more when soldiers are near."
-                ],
-                "required_tags": ["tavern", "war"],
-                "forbidden_tags": ["combat"]
-            }
         ],
-
-        "reply": [
-            {
-                "texts": [
-                    "Indeed.",
-                    "Could be worse."
-                ],
-                "required_tags": ["reply", "tavern"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "Keep your voice down.",
-                    "Walls listen better at night."
-                ],
-                "required_tags": ["reply", "tavern", "night"],
-                "forbidden_tags": ["combat"]
-            }
-        ]
     },
 
-    "Knight": {
+    "Forêt": {
 
-        "talk": [
+        "ambient": [
             {
                 "texts": [
-                    "I do not like quiet rooms.",
-                    "A tavern is safest before everyone starts shouting."
+                    "La forêt respire lentement sous une lumière pâle.",
+                    "Des branches humides filtrent le jour en éclats verts et gris."
                 ],
-                "required_tags": ["tavern"],
+                "required_tags": ["forest", "morning"],
                 "forbidden_tags": ["combat"]
             },
             {
                 "texts": [
-                    "At night, even old armor sounds nervous.",
-                    "I will take the door watch tonight."
+                    "Les troncs serrés découpent des chemins incertains entre les fougères.",
+                    "Le sous-bois est dense, plein de craquements lointains."
                 ],
-                "required_tags": ["tavern", "night"],
+                "required_tags": ["forest", "afternoon"],
                 "forbidden_tags": ["combat"]
             },
             {
                 "texts": [
-                    "Rain covers tracks too well.",
-                    "Bad weather makes bad news travel slower."
+                    "La forêt s'assombrit, et chaque sentier semble mener plus loin que prévu.",
+                    "Le soir pose une brume fine entre les arbres."
                 ],
-                "required_tags": ["rain"],
-                "forbidden_tags": ["combat"]
-            },
-
-            {
-                "texts": [
-                    "It's nice to walk in the forest when it's not raining.",
-                    "The forest is peaceful when the weather is good."
-                ],
-                "required_tags": ["goal_walk_in_forest"],
+                "required_tags": ["forest", "evening"],
                 "forbidden_tags": ["combat"]
             },
             {
                 "texts": [
-                    "I should rest at the tavern now.",
-                    "Time to head back to the tavern for some rest."
+                    "La nuit rend la forêt plus profonde, presque sans contours.",
+                    "Dans l'obscurité, les arbres se confondent avec le silence."
                 ],
-                "required_tags": ["goal_rest"],
+                "required_tags": ["forest", "night"],
                 "forbidden_tags": ["combat"]
             },
             {
                 "texts": [
-                    "I need to walk in the forest now.",
-                    "I should head to the forest now.",
-                    "I have some business to take care of in the forest."
+                    "La pluie accroche les feuilles et transforme le sol en boue noire.",
+                    "L'odeur de terre mouillée remonte entre les racines."
                 ],
-                "required_tags": ["moving_to_forest"],
+                "required_tags": ["forest", "rain"],
                 "forbidden_tags": ["combat"]
             },
-                {
-                    "texts": [
-                        "I should rest now.",
-                        "I need to head back to the tavern for some rest.",
-                        "I have been walking in the forest for a while, it's time to rest."
-                    ],
-                    "required_tags": ["moving_to_tavern"],
-                    "forbidden_tags": ["combat"]
-                }
-
         ],
-
-        "reply": [
-            {
-                "texts": [
-                    "That sounds right.",
-                    "I have seen worse signs."
-                ],
-                "required_tags": ["reply"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "War talk belongs outside, not beside the hearth.",
-                    "Then we should count food, blades, and exits."
-                ],
-                "required_tags": ["reply", "war"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "You always say that after midnight.",
-                    "Then close before trouble finds us."
-                ],
-                "required_tags": ["reply", "speaker_tavern_keeper", "night"],
-                "forbidden_tags": ["combat"]
-            }
-        ]
     },
-
-    "Squire": {
-
-        "talk": [
-            {
-                "texts": [
-                    "I could eat a whole loaf.",
-                    "Does anyone else smell stew?"
-                ],
-                "required_tags": ["tavern"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "Morning makes this place look almost respectable.",
-                    "I thought taverns were quieter in the morning."
-                ],
-                "required_tags": ["tavern", "morning"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "Afternoon is the best time for gossip.",
-                    "I like to listen to the stories in the afternoon."
-                ],
-                "required_tags": ["tavern", "afternoon"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "Evening is when the real fun starts!",
-                    "I hope we get to stay up late tonight!"
-                ],
-                "required_tags": ["tavern", "evening"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "The rain sounds like fingers on the shutters.",
-                    "I hope the road is not mud by dawn."
-                ],
-                "required_tags": ["rain"],
-                "forbidden_tags": ["combat"]
-            }
-        ],
-
-        "reply": [
-            {
-                "texts": [
-                    "If you say so.",
-                    "I had not thought of that."
-                ],
-                "required_tags": ["reply"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "I can check the horses.",
-                    "Should I bar the door?"
-                ],
-                "required_tags": ["reply", "night"],
-                "forbidden_tags": ["combat"]
-            },
-            {
-                "texts": [
-                    "Yes, sir.",
-                    "I will keep my eyes open."
-                ],
-                "required_tags": ["reply", "speaker_knight"],
-                "forbidden_tags": ["combat"]
-            }
-        ]
-    }
 }

@@ -17,9 +17,9 @@ class TextualRender:
         engine = self.world_state["engine"]
         if engine.has_comp("GameClock"):
             clock = engine.get_comp("GameClock")
-            self.world_state["logs"].append(f"[{clock.time}]")
+            self.world_state["logs"].append(f"[{clock.str_time}]")
 
-            output.append(f"[bold white]─── JOUR {clock.days} ───[/bold white] [{clock.time}]")
+            output.append(f"[bold white]─── JOUR {clock.days} ───[/bold white] [{clock.str_time}]\n")
 
         # 2. LIEUX
         for area in areas:
@@ -94,6 +94,7 @@ class TextualRender:
         hunger = e.get_comp("Hunger")
         mindset = e.get_comp("Mindset")
         schedule = e.get_comp("Schedule")
+        goal = e.get_comp("Goal")
 
         lines = []
         stats = []
@@ -110,10 +111,15 @@ class TextualRender:
             items_str = " ".join([f"[white][{i.name}][/white]" for i in inv.items])
             lines.append(f"  └─ inv {items_str}")
 
-        if schedule and schedule.entries and hour is not None:
+        if schedule and schedule.items and hour is not None:
             current_activity = schedule.get_current_activity(hour)
             if current_activity:
                 lines.append(f"  └─ [cyan]Activité :[/cyan] {current_activity}")
+
+        if goal:
+            lines.append(f"  └─ [magenta]Objectif :[/magenta] {goal.value}")
+        
+
         return "\n".join(lines) if lines else None
 
     def _color_stat(self, current, max_val):

@@ -21,23 +21,35 @@ class Movement:
     target_entity_id: any
 
 @dataclass
+class ScheduledActivity:
+    start: int
+    end: int
+    activity: str
+
+
+@dataclass
+class ScheduledAction:
+    hour: int
+    action: str
+    minute: int = 0
+
+ScheduledItem = ScheduledActivity | ScheduledAction
+
+@dataclass
 class Schedule:
-    entries: dict = None
+    items: list[ScheduledItem] = None
 
-    def get_current_activity(self, current_hour):
+    def get_actions_for_time(self, hours, minutes):
+        for item in self.items:
+            if isinstance(item, ScheduledAction) and item.hour == hours and item.minute == minutes:
+                yield item.action
 
-        valid_hours = [
-            hour
-            for hour in self.entries
-            if hour <= current_hour
-        ]
+    def get_current_activity(self, hours, minutes=0):
 
-        if not valid_hours:
-            return None
-
-        latest_hour = max(valid_hours)
-
-        return self.entries[latest_hour]
+        for item in self.items:
+            if isinstance(item, ScheduledActivity) and item.start <= hours < item.end:
+                return item.activity
+        return None
 
 @dataclass
 class Goal:
@@ -60,5 +72,12 @@ class GameClock:
         return self.hours < 6 or self.hours > 20
 
     @property
-    def time(self):
+    def str_time(self):
         return f"{self.hours:02d}:{self.minutes:02d}"
+    
+    @property
+    def total_minutes(self):
+        return self.days * 24 * 60 + self.hours * 60 + self.minutes
+
+    def get_time(self):
+        return self.days, self.hours, self.minutes
