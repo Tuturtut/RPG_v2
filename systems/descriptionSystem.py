@@ -17,6 +17,12 @@ class DescriptionSystem:
         self.context_builder = context_builder or ContextTagBuilder()
 
     def update(self, entities, world_state):
+        player = world_state.get("player")
+        if not player:
+            return
+        players_current_position = player.get_comp("Position") if player and player.has_comp("Position") else None
+        if not players_current_position:
+            return
 
         chronicles = world_state.setdefault("chronicles", [])
         describable_entities = [
@@ -26,6 +32,9 @@ class DescriptionSystem:
         random.shuffle(describable_entities)
 
         for entity in describable_entities:
+            area_comp = entity.get_comp("Area")
+            if area_comp and entity.id != players_current_position.at_entity_id:
+                continue
 
             if random.random() > self.description_chance:
                 continue

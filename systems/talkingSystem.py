@@ -24,11 +24,24 @@ class TalkingSystem:
         speakers = list(entities.values())
         random.shuffle(speakers)
 
+        player = world_state.get("player")
+        if not player:
+            return
+        player_current_position = player.get_comp("Position") if player and player.has_comp("Position") else None
+        if not player_current_position:
+            return
+
         for entity in speakers:
 
             if not self.can_talk(entity):
                 continue
 
+            entity_position = entity.get_comp("Position")
+            if not entity_position or not entity_position.at_entity_id:
+                continue
+            if entity_position.at_entity_id != player_current_position.at_entity_id:
+                continue
+    
             if random.random() > self.talk_chance:
                 continue
 

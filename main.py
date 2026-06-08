@@ -30,6 +30,7 @@ class App(App):
         #main_area {
             layout: grid;
             grid-size: 2;
+            grid-columns: 1fr 2fr;
         }
         #pnj_view, #logs{
             border-left: solid gray;
@@ -37,7 +38,8 @@ class App(App):
             padding: 1;
             color: #FFFFFF;
             background: #111111;
-        }"""
+        }
+        """
     
     DARK = True
 
@@ -60,6 +62,12 @@ class App(App):
         forest_id = self.world.create_entity(id="forest", name="Forêt")
         self.world.add_comp(forest_id, Area())
         self.world.add_tag(forest_id, "forest")
+
+
+        infiltrator_id = self.world.create_entity(id="infiltrator", name="Infiltrator")
+        self.world.add_comp(infiltrator_id, Position(forest_id))
+        self.world.add_comp(infiltrator_id, Health())
+        self.world.add_tag(infiltrator_id, "player")
 
         tavern_keeper_id = self.world.create_entity(id="tavern_keeper", name="Tavern Keeper")
         self.world.add_comp(tavern_keeper_id, Position(tavern_id))
@@ -91,6 +99,8 @@ class App(App):
             ScheduledActivity(start=13, end=17, activity="train"),
         ]))
 
+
+        self.world.world_state["player"] = self.world.entities[infiltrator_id]
         self.world.add_system(TimeSystem())
         self.world.add_system(GoalResolutionSystem())
         self.world.add_system(MovementSystem())
@@ -123,8 +133,6 @@ class App(App):
 
         # 3. On met à jour les Logs (Colone de droite)
         log_view = self.query_one("#logs", RichLog)
-
-        tick = self.world.world_state["engine"].get_comp("GameClock").tick
         
         # On vide les chroniques vers le log_view
         if "chronicles" in self.world.world_state:

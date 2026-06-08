@@ -48,6 +48,26 @@ DIALOGUES = {
             },
         ],
     },
+    "Knight": {
+        "talk": [
+            {
+                "texts": [
+                    "Hé, vous là-bas ! Vous avez l'air d'être quelqu'un de bien. Vous voulez m'aider à trouver un trésor caché dans la forêt ?",
+                    "Je suis à la recherche d'un trésor légendaire qui serait caché quelque part dans cette forêt. Vous voulez m'aider à le trouver ?"
+                ],
+                "required_tags": ["forest", "afternoon"],
+                "forbidden_tags": ["combat"]
+            },
+            {
+                "texts": [
+                    "Je suis désolé, je ne peux pas parler en ce moment. Je dois me concentrer sur ma quête.",
+                    "Je suis en mission pour trouver un trésor caché dans cette forêt. Je ne peux pas me permettre de perdre du temps à discuter."
+                ],
+                "required_tags": ["forest", "combat"],
+                "forbidden_tags": []
+            },
+        ],
+    },
 }
 
 
