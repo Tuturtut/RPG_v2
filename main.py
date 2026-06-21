@@ -30,7 +30,7 @@ class App(App):
         #main_area {
             layout: grid;
             grid-size: 2;
-            grid-columns: 1fr 2fr;
+            grid-columns: 2fr 3fr;
         }
         #pnj_view, #logs{
             border-left: solid gray;
@@ -65,7 +65,7 @@ class App(App):
 
 
         infiltrator_id = self.world.create_entity(id="infiltrator", name="Infiltrator")
-        self.world.add_comp(infiltrator_id, Position(forest_id))
+        self.world.add_comp(infiltrator_id, Position(tavern_id))
         self.world.add_comp(infiltrator_id, Health())
         self.world.add_tag(infiltrator_id, "player")
 
@@ -101,12 +101,12 @@ class App(App):
 
 
         self.world.world_state["player"] = self.world.entities[infiltrator_id]
-        self.world.add_system(TimeSystem())
+        self.world.add_system(ScheduleSystem())
         self.world.add_system(GoalResolutionSystem())
         self.world.add_system(MovementSystem())
         self.world.add_system(DescriptionSystem())
         self.world.add_system(TalkingSystem())
-        self.world.add_system(ScheduleSystem())
+        self.world.add_system(TimeSystem())
         self.world.add_system(DeleteSystem())
 
 

@@ -15,20 +15,18 @@ class ScheduleSystem:
 
 
             # 1. Action ponctuelle
-            actions = schedule.get_actions_for_time(hours=hours, minutes=minutes)
+            actions = list(schedule.get_actions_for_time(hours=hours, minutes=minutes))
             for action in actions:
-                world_state["chronicles"].append(f"{e.name} performs action: {action}")
                 e.add_comp(Goal(action))
 
             # 2. Activité de longue durée
             activity = schedule.get_current_activity(hours=hours, minutes=minutes)
 
-
             if not activity:
                 continue
 
             current_goal = e.get_comp("Goal")
-            if current_goal and current_goal.value == activity:
+            if current_goal:
                 continue
 
             e.add_comp(Goal(activity))

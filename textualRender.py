@@ -24,7 +24,9 @@ class TextualRender:
         # 2. LIEUX
         for area in areas:
             a = entities[area]
-            output.append(f"[blue b]{a.name.upper()}[/blue b]")
+            tags = ", ".join(a.get_tags()) if a.get_tags() else ""
+            output.append(f"[bold cyan]▶ {a.name.upper()}[/bold cyan] [italic]{tags}[/italic]")
+
 
         # 3. ACTEURS
         for actor in actors:

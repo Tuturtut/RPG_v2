@@ -21,3 +21,10 @@ class Entity:
     def has_tag(self, tag_name):
         return tag_name in self.tags
     
+    def add_tag(self, tag_name):
+        self.tags.add(tag_name)
+        return self
+    
+    def get_tags(self):
+        return self.tags
+    

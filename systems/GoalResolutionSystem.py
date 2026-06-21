@@ -40,8 +40,12 @@ class GoalResolutionSystem:
             # 2. If the target has reached the area, resolve the goal
             if goal.value == "open_tavern":
                 world_state["tavern_open"] = True
+                target.tags.discard("tavern_closed")
+                target.add_tag("tavern_open")
             
             if goal.value == "close_tavern":
                 world_state["tavern_open"] = False
+                target.tags.discard("tavern_open")
+                target.add_tag("tavern_closed")
 
             e.remove_comp("Goal")
